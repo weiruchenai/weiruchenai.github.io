@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo,Next," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前些日子花了点空余时间用HEXO搭了一个自己的博客并配置了一个主题，搭建和配置过程中或多或少碰到一些问题，将这些问题记录于此供来日若有需要进行参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HEXO博客搭建与Next主题配置过程中踩过的坑">
+<meta property="og:url" content="http://weiruchenai.github.io/2020/02/01/HEXO%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8ENext%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:site_name" content="DCWang&#39;s Blog">
+<meta property="og:description" content="前些日子花了点空余时间用HEXO搭了一个自己的博客并配置了一个主题，搭建和配置过程中或多或少碰到一些问题，将这些问题记录于此供来日若有需要进行参考。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://weiruchenai.github.io/images/20200203_1.png">
+<meta property="og:image" content="http://weiruchenai.github.io/images/20200203_2.gif">
+<meta property="og:image" content="http://weiruchenai.github.io/images/20200203_3.gif">
+<meta property="article:published_time" content="2020-02-01T11:45:19.000Z">
+<meta property="article:modified_time" content="2020-02-03T13:12:55.702Z">
+<meta property="article:author" content="DCWang">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Next">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://weiruchenai.github.io/images/20200203_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://weiruchenai.github.io/2020/02/01/HEXO博客搭建与Next主题配置过程中踩过的坑/"/>
+
+
+
+
+
+  <title>HEXO博客搭建与Next主题配置过程中踩过的坑 | DCWang's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DCWang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">听风辄碎的孤魂。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://weiruchenai.github.io/2020/02/01/HEXO%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8ENext%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DCWang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/1.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCWang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HEXO博客搭建与Next主题配置过程中踩过的坑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-01T19:45:19+08:00">
+                2020-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">Blog</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/Next/" itemprop="url" rel="index">
+                    <span itemprop="name">Next</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  前些日子花了点空余时间用HEXO搭了一个自己的博客并配置了一个主题，搭建和配置过程中或多或少碰到一些问题，将这些问题记录于此供来日若有需要进行参考。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="HEXO博客搭建"><a href="#HEXO博客搭建" class="headerlink" title="HEXO博客搭建"></a>HEXO博客搭建</h3><p>关于网站搭建的具体过程随便一搜教程多得是，贴出一个知乎的文章<a href="https://zhuanlan.zhihu.com/p/26625249" target="_blank" rel="noopener"> GitHub+Hexo 搭建个人网站详细教程 </a>，作者ID是“吴润”，写得已经相当详细。一步步按步骤下来即可。第一次配置好后如下图所示：</p>
+<img src="\images\20200203_1.png" style="zoom:50%;" />
+
+
+<h3 id="Next主题配置"><a href="#Next主题配置" class="headerlink" title="Next主题配置"></a>Next主题配置</h3><p>安装完HEXO后网页博客是HEXO的默认主题，为进一步美化博客，接下来安装Next主题。此处贴出一个博客网站<a href="http://jeffyang.top/Hexo/Hexo%E4%B8%BB%E9%A2%98Next%E7%BE%8E%E5%8C%96/" target="_blank" rel="noopener">Next主题优化</a>，作者ID“Jeff Yang”，内容已经比较细节。</p>
+<p><em>我的Next主题版本为5.1.4。</em></p>
+<p>下面是在配置中遇到的一些问题。</p>
+<h4 id="命令行安装主题时报错"><a href="#命令行安装主题时报错" class="headerlink" title="命令行安装主题时报错"></a>命令行安装主题时报错</h4><p>在执行以下命令安装主题时</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;iissnan&#x2F;hexo-theme-next themes&#x2F;next</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这是Next主题5.1.4版本，在此之后，Next主题的Github仓库已经进行移动，且5.1.4版本不再更新和维护，新的仓库地址为<a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">https://github.com/theme-next/hexo-theme-next</a> ，最新的版本已更新到7.7.1。因为个人审美喜好，更喜欢旧版本，若有需要只需将上面的命令行中的网址替换成新的仓库的网址即可。</p>
+</blockquote>
+<p>发现以下内容的报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">remote: Counting objects: xxxx, done.</span><br><span class="line">remote: Compressing objects: 100% (xxxx&#x2F;xxxx), done.</span><br><span class="line">error: RPC failed; result&#x3D;xx, HTTP code &#x3D; xxxx MiB | xxx MiB&#x2F;s   </span><br><span class="line">fatal: The remote end hung up unexpectedly</span><br><span class="line">fatal: early EOF</span><br><span class="line">fatal: index-pack failed</span><br></pre></td></tr></table></figure>
+
+<p>原因是clone内容较大，将缓存设置大些即可，解决办法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.postBuffer 524288000</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="已创建菜单页点击后却报错"><a href="#已创建菜单页点击后却报错" class="headerlink" title="已创建菜单页点击后却报错"></a>已创建菜单页点击后却报错</h4><p>首先进行菜单设置，找到主题配置文件_config.yml，搜索menu，把需要的菜单页前的#去掉。</p>
+<blockquote>
+<p>是主题的配置文件，不是网站的配置文件。</p>
+</blockquote>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/||</span> <span class="string">home</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/||</span> <span class="string">user</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="string">/tags/||</span> <span class="string">tags</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/||</span> <span class="string">th</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/||</span> <span class="string">archive</span></span><br><span class="line">  <span class="comment">#schedule: /schedule/ || calendar</span></span><br><span class="line">  <span class="comment">#sitemap: /sitemap.xml || sitemap</span></span><br><span class="line">  <span class="comment">#commonweal: /404/ || heartbeat</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来创建页面，以<code>Tags</code>为例，命令行输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
+
+<p>然后在<code>source</code>目录下就会生成tags文件夹，文件夹里有一个<code>index.md</code>，打开将页面的<code>type</code>设置为相应的内容。其他菜单页同理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: &quot;Tags&quot;</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line">layout: &quot;tags&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p><em>但是在操作过程中，发现点击菜单页会报错。</em><br>以<code>Tags</code>为例，点击<code>Tags</code>后，正常情况下应该跳转到<code>http://weiruchenai.github.io/tags/</code>, 但是我变成了<code>https://weiruchenai.github.io/tags/20%</code>, 比正常情况下多出一个<code>/20%</code>。<br>排查了许久还是没能找到原因，最后发现，上面在<code>menu</code>下的菜单页前去掉#注释后，<strong>只要把该菜单页那行<code>||</code>符号前的空格也去掉</strong>，网页就能正确显示。</p>
+<p>另外要注意的是修改<code>index.md</code>时，每个冒号后都需要一个空格。排查上一个问题时发现有些人配置时，若<code>index.md</code>文件内容中，最下面有分割线<code>---</code>，且分割线后面若没有空格，界面也无法正确显示。因此最好在分割线<code>---</code>后面也加一个空格。</p>
+<h4 id="头像设置为圆形且可旋转"><a href="#头像设置为圆形且可旋转" class="headerlink" title="头像设置为圆形且可旋转"></a>头像设置为圆形且可旋转</h4><p>Next5.1.4版本不支持直接配置头像圆形并且鼠标移入发生旋转。</p>
+<p>找到<code>YourBlog/themes/next/source/css/_common/components/sidebar/sidebar-author.styl</code>,修改<code>.site-author-image</code>为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.site-author-image &#123;</span><br><span class="line">  display: block;</span><br><span class="line">  margin: 0 auto;</span><br><span class="line">  padding: $site-author-image-padding;</span><br><span class="line">  max-width: $site-author-image-width;</span><br><span class="line">  height: $site-author-image-height;</span><br><span class="line">  border: $site-author-image-border-width solid $site-author-image-border-color;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 修改头像边框</span><br><span class="line">  border-radius: 50%;</span><br><span class="line">  -webkit-border-radius: 50%;</span><br><span class="line">  -moz-border-radius: 50%;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 设置旋转</span><br><span class="line">  transition: 1.5s all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>添加头像旋转属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 可旋转的圆形头像,&#96;hover&#96;动作</span><br><span class="line">.site-author-image:hover &#123;</span><br><span class="line">-webkit-transform: rotate(360deg);</span><br><span class="line">-moz-transform: rotate(360deg);</span><br><span class="line">-ms-transform: rotate(360deg);</span><br><span class="line">-transform: rotate(360deg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="网页中点击浮现爱心"><a href="#网页中点击浮现爱心" class="headerlink" title="网页中点击浮现爱心"></a>网页中点击浮现爱心</h4><p>首先创建js文件，在<code>YourBlog/themes/next/source/js/src</code>下新建文件<code>clicklove.js</code>，接着把该下面的代码拷贝粘贴到<code>clicklove.js</code>文件中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params">e,t,a</span>)</span>&#123;<span class="function"><span class="keyword">function</span> <span class="title">n</span>(<span class="params"></span>)</span>&#123;c(<span class="string">".heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;"</span>),o(),r()&#125;<span class="function"><span class="keyword">function</span> <span class="title">r</span>(<span class="params"></span>)</span>&#123;<span class="keyword">for</span>(<span class="keyword">var</span> e=<span class="number">0</span>;e&lt;d.length;e++)d[e].alpha&lt;=<span class="number">0</span>?(t.body.removeChild(d[e].el),d.splice(e,<span class="number">1</span>)):(d[e].y--,d[e].scale+=<span class="number">.004</span>,d[e].alpha-=<span class="number">.013</span>,d[e].el.style.cssText=<span class="string">"left:"</span>+d[e].x+<span class="string">"px;top:"</span>+d[e].y+<span class="string">"px;opacity:"</span>+d[e].alpha+<span class="string">";transform:scale("</span>+d[e].scale+<span class="string">","</span>+d[e].scale+<span class="string">") rotate(45deg);background:"</span>+d[e].color+<span class="string">";z-index:99999"</span>);requestAnimationFrame(r)&#125;<span class="function"><span class="keyword">function</span> <span class="title">o</span>(<span class="params"></span>)</span>&#123;<span class="keyword">var</span> t=<span class="string">"function"</span>==<span class="keyword">typeof</span> e.onclick&amp;&amp;e.onclick;e.onclick=<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;t&amp;&amp;t(),i(e)&#125;&#125;<span class="function"><span class="keyword">function</span> <span class="title">i</span>(<span class="params">e</span>)</span>&#123;<span class="keyword">var</span> a=t.createElement(<span class="string">"div"</span>);a.className=<span class="string">"heart"</span>,d.push(&#123;<span class="attr">el</span>:a,<span class="attr">x</span>:e.clientX<span class="number">-5</span>,<span class="attr">y</span>:e.clientY<span class="number">-5</span>,<span class="attr">scale</span>:<span class="number">1</span>,<span class="attr">alpha</span>:<span class="number">1</span>,<span class="attr">color</span>:s()&#125;),t.body.appendChild(a)&#125;<span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params">e</span>)</span>&#123;<span class="keyword">var</span> a=t.createElement(<span class="string">"style"</span>);a.type=<span class="string">"text/css"</span>;<span class="keyword">try</span>&#123;a.appendChild(t.createTextNode(e))&#125;<span class="keyword">catch</span>(t)&#123;a.styleSheet.cssText=e&#125;t.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>].appendChild(a)&#125;<span class="function"><span class="keyword">function</span> <span class="title">s</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span><span class="string">"rgb("</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">","</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">","</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">")"</span>&#125;<span class="keyword">var</span> d=[];e.requestAnimationFrame=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span> e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;setTimeout(e,<span class="number">1e3</span>/<span class="number">60</span>)&#125;&#125;(),n()&#125;(<span class="built_in">window</span>,<span class="built_in">document</span>);</span><br></pre></td></tr></table></figure>
+
+<p>接下来在<code>YourBlog/themes/next/layout/_layout.swig</code>的末尾<code>&lt;\body&gt;</code>的标签前，添加如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 页面点击小红心 --&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span> src=<span class="string">"/js/src/clicklove.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>完成后效果如下</p>
+<img src="\images\20200203_2.gif" style="zoom:80%;" />
+
+<p>因个人审美原因，黑白灰简洁的博客，我想要将随机颜色的爱心也改成单纯的灰色，在<code>clicklove.js</code>中搜索<code>random</code>词，定位到一个名为s的函数下，分析代码发现该函数是生成爱心颜色的函数，返回的是rgb颜色。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">s</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span><span class="string">"rgb("</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">","</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">","</span>+~~(<span class="number">255</span>*<span class="built_in">Math</span>.random())+<span class="string">")"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将颜色改回灰色，对函数进行修改</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">s</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span><span class="string">"rgb("</span>+<span class="number">9</span>+<span class="string">","</span>+<span class="number">9</span>+<span class="string">","</span>+<span class="number">9</span>+<span class="string">")"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终的效果如下</p>
+<img src="\images\20200203_3.gif" style="zoom:80%;" />
+
+<h3 id="文章发布"><a href="#文章发布" class="headerlink" title="文章发布"></a>文章发布</h3><h4 id="文章标签归类与描述"><a href="#文章标签归类与描述" class="headerlink" title="文章标签归类与描述"></a>文章标签归类与描述</h4><p>创建文章,在命令行中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo n &quot;博客名字&quot;</span><br></pre></td></tr></table></figure>
+
+<p>生成的md文件在<code>YourBlog/source/_posts/</code>下，打开生成的md文件，修改顶部的题目、标签、分类和描述，文章在首页不显示全文时，description是首页显示的文章内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">title: HEXO博客搭建与Next主题配置过程中踩过的坑</span><br><span class="line">date: 2020-02-01 19:45:19</span><br><span class="line">tags: </span><br><span class="line">  - Hexo</span><br><span class="line">  - Next</span><br><span class="line">categories: </span><br><span class="line">  - Blog</span><br><span class="line">  - Next</span><br><span class="line">description: 前些日子花了点空余时间用HEXO搭了一个自己的博客并配置了一个主题，搭建和配置过程中或多或少碰到一些问题，记录于此供来日若有需要进行参考。</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意的是每个冒号后面也需要空格。这里<code>tags</code>和<code>categories</code>的区别在于<code>categories</code>有层级而<code>tags</code>没有层级。<br>另外，存在多个tag或层级categoriy时，如上方内容，<code>tags:</code>后接一个空格，换行后<code>-</code>前是两个空格而不是tab键的制表符。</p>
+<h4 id="文章中的图片插入"><a href="#文章中的图片插入" class="headerlink" title="文章中的图片插入"></a>文章中的图片插入</h4><p>若图片较多，有需要可将图片存放在图床，关于使用图床具体方法见开篇提到的<a href="https://zhuanlan.zhihu.com/p/26625249" target="_blank" rel="noopener"> GitHub+Hexo 搭建个人网站详细教程 </a>。<br>我目前图片较少因此将图片存放在了本地，通过相对路径的方式进行引用。</p>
+<p>具体方法是在<code>YourBlog/source/</code>目录下新建一个images文件夹，在图片插入时，路径采用相对路径：<code>\images\xxx.png</code></p>
+<p>采用相对路径存在一个问题，就是编辑Markdown时，图片是无法在Markdown编辑器内正确显示的。不过不用担心，命令行输入<code>hexo s</code>启动本地服务器测试一下，发现图片在网页上能够正确显示。</p>
+<h4 id="文章发布-1"><a href="#文章发布-1" class="headerlink" title="文章发布"></a>文章发布</h4><p>若对主题或网站配置进行过修改，或者需要发布文章了，在正式部署网页之前要先在命行中执行<code>hexo clean</code>,否则部署后可能发现网页没有得到修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>暂时就这些，若想到新的再更新……</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
+          
+            <a href="/tags/Next/" rel="tag"><i class="fa fa-tag"></i> Next</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/27/2019-12-19/" rel="next" title="2019.12.19">
+                <i class="fa fa-chevron-left"></i> 2019.12.19
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/1.JPG"
+                alt="DCWang" />
+            
+              <p class="site-author-name" itemprop="name">DCWang</p>
+              <p class="site-description motion-element" itemprop="description">听风辄碎的孤魂。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:475596527@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/dcwang74" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HEXO博客搭建"><span class="nav-number">1.</span> <span class="nav-text">HEXO博客搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Next主题配置"><span class="nav-number">2.</span> <span class="nav-text">Next主题配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令行安装主题时报错"><span class="nav-number">2.1.</span> <span class="nav-text">命令行安装主题时报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#已创建菜单页点击后却报错"><span class="nav-number">2.2.</span> <span class="nav-text">已创建菜单页点击后却报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#头像设置为圆形且可旋转"><span class="nav-number">2.3.</span> <span class="nav-text">头像设置为圆形且可旋转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网页中点击浮现爱心"><span class="nav-number">2.4.</span> <span class="nav-text">网页中点击浮现爱心</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文章发布"><span class="nav-number">3.</span> <span class="nav-text">文章发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文章标签归类与描述"><span class="nav-number">3.1.</span> <span class="nav-text">文章标签归类与描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文章中的图片插入"><span class="nav-number">3.2.</span> <span class="nav-text">文章中的图片插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文章发布-1"><span class="nav-number">3.3.</span> <span class="nav-text">文章发布</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCWang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>
