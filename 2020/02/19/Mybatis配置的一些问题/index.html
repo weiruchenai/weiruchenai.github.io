@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Diary,Books," />
+  <meta name="keywords" content="Mybatis," />
 
 
 
@@ -86,22 +86,21 @@
 
 
 
-<meta name="description" content="她想亲近的人远离了她，她竭力想远离的人终于没能摆脱。在推杯换盏的嗡嗡的嘈杂声中，在这洪水般喧嚣的声音之上，是她被葬送了的青春，也是人生。">
+<meta name="description" content="总结了关于Mybatis配置过程中遇到的一些问题，主要有服务时区错误、#{}解析错误、以及去除查询关系映射文件xml中SQL语句黄线提示。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2020.2.1">
-<meta property="og:url" content="http://weiruchenai.github.io/2020/02/07/2020-2-1/index.html">
+<meta property="og:title" content="Mybatis配置的一些问题">
+<meta property="og:url" content="http://weiruchenai.github.io/2020/02/19/Mybatis%E9%85%8D%E7%BD%AE%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="DCWang&#39;s Blog">
-<meta property="og:description" content="她想亲近的人远离了她，她竭力想远离的人终于没能摆脱。在推杯换盏的嗡嗡的嘈杂声中，在这洪水般喧嚣的声音之上，是她被葬送了的青春，也是人生。">
+<meta property="og:description" content="总结了关于Mybatis配置过程中遇到的一些问题，主要有服务时区错误、#{}解析错误、以及去除查询关系映射文件xml中SQL语句黄线提示。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3EeD41.jpg">
-<meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3Ee2uD.jpg">
-<meta property="article:published_time" content="2020-02-07T15:06:49.000Z">
-<meta property="article:modified_time" content="2020-02-19T05:10:20.145Z">
+<meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3E8OSJ.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3EJ34O.png">
+<meta property="article:published_time" content="2020-02-19T05:13:10.000Z">
+<meta property="article:modified_time" content="2020-02-19T06:36:09.144Z">
 <meta property="article:author" content="DCWang">
-<meta property="article:tag" content="Diary">
-<meta property="article:tag" content="Books">
+<meta property="article:tag" content="Mybatis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.ax1x.com/2020/02/19/3EeD41.jpg">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/02/19/3E8OSJ.png">
 
 
 
@@ -131,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://weiruchenai.github.io/2020/02/07/2020-2-1/"/>
+  <link rel="canonical" href="http://weiruchenai.github.io/2020/02/19/Mybatis配置的一些问题/"/>
 
 
 
 
 
-  <title>2020.2.1 | DCWang's Blog</title>
+  <title>Mybatis配置的一些问题 | DCWang's Blog</title>
   
 
 
@@ -274,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://weiruchenai.github.io/2020/02/07/2020-2-1/">
+    <link itemprop="mainEntityOfPage" href="http://weiruchenai.github.io/2020/02/19/Mybatis%E9%85%8D%E7%BD%AE%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="DCWang">
@@ -291,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">2020.2.1</h1>
+          <h1 class="post-title" itemprop="name headline">Mybatis配置的一些问题</h1>
         
 
         <div class="post-meta">
@@ -303,8 +302,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-07T23:06:49+08:00">
-                2020-02-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-19T13:13:10+08:00">
+                2020-02-19
               </time>
             
 
@@ -326,8 +325,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Diary/" itemprop="url" rel="index">
-                    <span itemprop="name">Diary</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/Mybatis/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis</span>
                   </a>
                 </span>
 
@@ -357,7 +367,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  565
+                  735
                 </span>
               
 
@@ -373,7 +383,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -381,7 +391,7 @@
 
           
               <div class="post-description">
-                  她想亲近的人远离了她，她竭力想远离的人终于没能摆脱。在推杯换盏的嗡嗡的嘈杂声中，在这洪水般喧嚣的声音之上，是她被葬送了的青春，也是人生。
+                  总结了关于Mybatis配置过程中遇到的一些问题，主要有服务时区错误、#{}解析错误、以及去除查询关系映射文件xml中SQL语句黄线提示。
               </div>
           
 
@@ -398,19 +408,34 @@
       
 
       
-        <h2 id="2020-2-1-23-29"><a href="#2020-2-1-23-29" class="headerlink" title="2020.2.1.23:29"></a>2020.2.1.23:29</h2><hr>
-<p>&emsp;&emsp;武汉疫情进一步发酵，谁能想到一个礼拜前感染人数仅100多个，新大通也还是一如既往地人来人往。今天已经是到了全国上下风声鹤唳的地步，今天感染人数已经超过了1W。昨日丁香医生推送文章上面写着，每天变化的不是数字，而是人。</p>
-<p>&emsp;&emsp;早上起来，拉开窗帘，房间角落的阴霾被一扫而空，空气中浮动着的无数尘埃，在我拉开窗帘的一瞬间四散纷飞，窗外久违地艳阳高照。<br>&emsp;&emsp;下午拎一把椅子，在门口石凳上看了一下午的书，平凡的世界，读到润叶婚礼当日那章，内心深处某根不知名的神经传来锐利的疼痛，像是大风从黑暗里吹过来，卷走了所有温度又不见踪影。她想亲近的人远离了她，她竭力想远离的人终于没能摆脱。在推杯换盏的嗡嗡的嘈杂声中，在这洪水般喧嚣的声音之上，是她被葬送了的青春，也是人生。</p>
-<p>&emsp;&emsp;日光西斜，屋子的阴影不动声色地爬上了石凳的角落。我合上书，戴上口罩打算去外面逛一圈。冬日暖阳下的整个世界明晃晃一片，空气中散发着的轻微热度，让人耳尖微微发烫。远方吹来的风，裹挟着先前被带走的温度在额头碰撞出毛茸茸的触感，一阵一阵地覆盖在身上。田间小路走入若干，回头时，远处有个人牵着一只狗，到了田边放掉了狗绳子，狗子没了束缚，摇晃着尾巴窜来窜去。再回头，一位大爷地里干完农活，挑着担子从我身边摇摇晃晃走过。闭上眼，仿佛在风中听到了那曲令润叶心碎的信天游——</p>
+        <h2 id="服务时区错误"><a href="#服务时区错误" class="headerlink" title="服务时区错误"></a>服务时区错误</h2><p><strong>错误代码</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.ibatis.exceptions.PersistenceException: </span><br><span class="line">### Error querying database.  Cause: java.sql.SQLException: The server time zone value &#39;�й���׼ʱ��&#39; is unrecognized or represents more than one time zone. You must configure either the server or JDBC driver (via the &#39;serverTimezone&#39; configuration property) to use a more specifc time zone value if you want to utilize time zone support.</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决方法</strong>：找到Mybatis配置文件SqlMapConfig.xml下的数据库连接池，在其中数据库<code>url</code>的<code>value</code>后加上<code>?characterEncoding=utf-8&amp;serverTimezone=UTC</code>其中前半部分是以防万一为了解决中文乱码的问题 ，后半部分中的<code>UTC</code>是统一标准世界时间，能够解决上述问题</p>
+<p>但是实际操作中又发现以下错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">org.apache.ibatis.exceptions.PersistenceException: </span><br><span class="line">### Error building SqlSession.</span><br><span class="line">### Cause: org.apache.ibatis.builder.BuilderException: Error creating document instance.  Cause: org.xml.sax.SAXParseException; lineNumber: 15; columnNumber: 112; 对实体 &quot;serverTimezone&quot; 的引用必须以 &#39;;&#39; 分隔符结尾。</span><br></pre></td></tr></table></figure>
+
+<p>这是因为在xml中&amp;符号是作为<a href="https://blog.csdn.net/qq_33811662/article/details/80231312" target="_blank" rel="noopener">实体字符</a>形式存在的</p>
+<p>因此只需将<code>&amp;</code>符号改成<code>amp;</code>即可，最后的数据库连接池中的<code>url</code>的<code>value</code>值为</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://localhost:3306/mybatistest?characterEncoding=utf-8<span class="symbol">&amp;amp;</span>serverTimezone=UTC</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="解析错误"><a href="#解析错误" class="headerlink" title="#{}解析错误"></a>#{}解析错误</h2><p><strong>错误代码</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.ibatis.exceptions.PersistenceException: </span><br><span class="line">### Error querying database.  Cause: org.apache.ibatis.type.TypeException: Could not set parameters for mapping: ParameterMapping&#123;property&#x3D;&#39;id&#39;, mode&#x3D;IN, javaType&#x3D;class java.lang.Integer, jdbcType&#x3D;null, numericScale&#x3D;null, resultMapId&#x3D;&#39;null&#39;, jdbcTypeName&#x3D;&#39;null&#39;, expression&#x3D;&#39;null&#39;&#125;. Cause: org.apache.ibatis.type.TypeException: Error setting non null for parameter #2 with JdbcType null . Try setting a different JdbcType for this parameter or a different configuration property. Cause: java.sql.SQLException: Parameter index out of range (2 &gt; number of parameters, which is 1).</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决办法</strong>：首先如果占位符<em>#{}内部没有内容</em>则会报这个错误，但我的问题不在这。我们先找到测试方法所用的sql查询关系映射文件，我的工程里为<code>user.xml</code>查看<strong><em>运行程序时所执行的sq语句部分</em></strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--根据ID查找用户--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserById"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    SELECT</span><br><span class="line">    `id`,</span><br><span class="line">    `username`,</span><br><span class="line">    `birthday`,</span><br><span class="line">    `sex`,</span><br><span class="line">    `address`</span><br><span class="line">    FROM `user`</span><br><span class="line">    WHERE id = #&#123;id&#125; /*这里#&#123;id&#125;表示占位符*/</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意在select标签内的最后一行，注释内不能存在占位符<code>#{}</code>，测试时发现注释中去掉该占位符就正常运行了。其原理尚不清楚。</p>
 <blockquote>
-<p>正月里冻冰呀立春消<br>二月里鱼儿水上涨<br>水呀上漂来想起我的哥<br>想起我的哥哥<br>想起我的哥哥<br>想起我的哥哥呀你等一等我</p>
+<p>这个问题的解决的过程实在是匪夷所思，Google了一个小时，各种各样的解决方法都行不通，最后万万没想到问题出在注释里，第一次遇到因为注释里的内容出问题的error，真是绝了。</p>
 </blockquote>
-<img src="https://s2.ax1x.com/2020/02/19/3EeD41.jpg" alt="3EeD41.jpg" style="zoom:12%;" />
+<h2 id="去除查询关系映射文件xml中SQL语句黄线提示"><a href="#去除查询关系映射文件xml中SQL语句黄线提示" class="headerlink" title="去除查询关系映射文件xml中SQL语句黄线提示"></a>去除查询关系映射文件xml中SQL语句黄线提示</h2><p><strong>问题详情</strong>：配置过程中，发现查询关系映射文件<code>user.xml</code>中的SQL语句部分始终有黄线提示鼠标移入IDEA提示<code>SQL dialect is not congigured</code></p>
+<p><img src="https://s2.ax1x.com/2020/02/19/3E8OSJ.png" alt="3E8OSJ.png"></p>
+<p><strong>解决方法：</strong>在IDEA中进行设置找到<code>Settings-Languages&amp;Frameworks-SQLDialect</code>，在右侧的选项面板中的<code>Global SQL Dialect</code>和<code>Project SQL Dialect</code>的属性均设为<code>Generic</code>并应用。</p>
+<p><a href="https://imgchr.com/i/3EJ34O" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/19/3EJ34O.png" alt="3EJ34O.png"></a></p>
 
-<img src="https://s2.ax1x.com/2020/02/19/3Ee2uD.jpg" alt="3Ee2uD.jpg" style="zoom:12%;" />
-
-<hr>
-<h2 id="2020-2-2-0-17"><a href="#2020-2-2-0-17" class="headerlink" title="2020.2.2.0:17"></a>2020.2.2.0:17</h2>
       
     </div>
     
@@ -427,9 +452,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Diary/" rel="tag"><i class="fa fa-tag"></i> Diary</a>
-          
-            <a href="/tags/Books/" rel="tag"><i class="fa fa-tag"></i> Books</a>
+            <a href="/tags/Mybatis/" rel="tag"><i class="fa fa-tag"></i> Mybatis</a>
           
         </div>
       
@@ -442,8 +465,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/01/HEXO%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8ENext%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/" rel="next" title="HEXO博客搭建与Next主题配置过程中踩过的坑">
-                <i class="fa fa-chevron-left"></i> HEXO博客搭建与Next主题配置过程中踩过的坑
+              <a href="/2020/02/07/%E5%90%B9%E5%93%A8%E4%BA%BA%E3%80%81/" rel="next" title="吹哨人、">
+                <i class="fa fa-chevron-left"></i> 吹哨人、
               </a>
             
           </div>
@@ -451,10 +474,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/07/%E5%90%B9%E5%93%A8%E4%BA%BA%E3%80%81/" rel="prev" title="吹哨人、">
-                吹哨人、 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -606,7 +625,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2020-2-1-23-29"><span class="nav-number">1.</span> <span class="nav-text">2020.2.1.23:29</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2020-2-2-0-17"><span class="nav-number">2.</span> <span class="nav-text">2020.2.2.0:17</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务时区错误"><span class="nav-number">1.</span> <span class="nav-text">服务时区错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析错误"><span class="nav-number">2.</span> <span class="nav-text">#{}解析错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#去除查询关系映射文件xml中SQL语句黄线提示"><span class="nav-number">3.</span> <span class="nav-text">去除查询关系映射文件xml中SQL语句黄线提示</span></a></li></ol></div>
             
 
           </div>
