@@ -96,7 +96,7 @@
 <meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3E8OSJ.png">
 <meta property="og:image" content="https://s2.ax1x.com/2020/02/19/3EJ34O.png">
 <meta property="article:published_time" content="2020-02-19T05:13:10.000Z">
-<meta property="article:modified_time" content="2020-02-20T06:46:02.799Z">
+<meta property="article:modified_time" content="2020-02-20T07:37:06.165Z">
 <meta property="article:author" content="DCWang">
 <meta property="article:tag" content="Mybatis">
 <meta name="twitter:card" content="summary">
@@ -367,7 +367,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  735
+                  736
                 </span>
               
 
@@ -416,7 +416,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">org.apache.ibatis.exceptions.PersistenceException: </span><br><span class="line">### Error building SqlSession.</span><br><span class="line">### Cause: org.apache.ibatis.builder.BuilderException: Error creating document instance.  Cause: org.xml.sax.SAXParseException; lineNumber: 15; columnNumber: 112; 对实体 &quot;serverTimezone&quot; 的引用必须以 &#39;;&#39; 分隔符结尾。</span><br></pre></td></tr></table></figure>
 
 <p>这是因为在xml中&amp;符号是作为<a href="https://blog.csdn.net/qq_33811662/article/details/80231312" target="_blank" rel="noopener">实体字符</a>形式存在的</p>
-<p>因此只需将<code>&amp;</code>符号改成<code>amp;</code>即可，最后的数据库连接池中的<code>url</code>的<code>value</code>值为</p>
+<p>因此只需将<code>&amp;</code>符号改成<code>&amp;amp;</code>即可，最后的数据库连接池中的<code>url</code>的<code>value</code>值为</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://localhost:3306/mybatistest?characterEncoding=utf-8<span class="symbol">&amp;amp;</span>serverTimezone=UTC</span><br></pre></td></tr></table></figure>
 
 
