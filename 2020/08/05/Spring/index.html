@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flat-top.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://weiruchenai.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Spring概述、IOC（核心思想 工程搭建 DI方式）、AOP（核心概念 实现流程 通知类型 表达式写法）、事务管理（概念 API 事务管理）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring">
+<meta property="og:url" content="http://weiruchenai.github.io/2020/08/05/Spring/index.html">
+<meta property="og:site_name" content="DCWang&#39;s Blog">
+<meta property="og:description" content="Spring概述、IOC（核心思想 工程搭建 DI方式）、AOP（核心概念 实现流程 通知类型 表达式写法）、事务管理（概念 API 事务管理）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.ax1x.com/2020/02/28/3DQwKf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/02/3RbDyR.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/06/3qkwnO.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/06/3q5QfI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/21/J8MPZF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/21/J82UXt.png">
+<meta property="article:published_time" content="2020-08-05T08:50:31.000Z">
+<meta property="article:modified_time" content="2020-08-05T10:21:07.195Z">
+<meta property="article:author" content="DCWang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/02/28/3DQwKf.png">
+
+<link rel="canonical" href="http://weiruchenai.github.io/2020/08/05/Spring/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Spring | DCWang's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DCWang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">听风辄碎的孤魂。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://weiruchenai.github.io/2020/08/05/Spring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.JPG">
+      <meta itemprop="name" content="DCWang">
+      <meta itemprop="description" content="听风辄碎的孤魂。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCWang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-05 16:50:31 / 修改时间：18:21:07" itemprop="dateCreated datePublished" datetime="2020-08-05T16:50:31+08:00">2020-08-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+            <div class="post-description">Spring概述、IOC（核心思想 工程搭建 DI方式）、AOP（核心概念 实现流程 通知类型 表达式写法）、事务管理（概念 API 事务管理）。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>一站式框架——web层，服务层，持久层<br>Web层： SpringMVC<br>Service层： Bean管理、声明式事务<br>DAO层： ORM模块、JDBC模块</p>
+</blockquote>
+<h3 id="Spring——IOC"><a href="#Spring——IOC" class="headerlink" title="Spring——IOC"></a>Spring——IOC</h3><blockquote>
+<p>IOC：inversion of control，控制反转。作用是将对象的创建权反转给（交给）Spring，使用时只需调用即可。主要用作容器管理。</p>
+</blockquote>
+<ul>
+<li><p><strong>IOC核心思想</strong></p>
+<p>对接口和实现类之间解耦合。通过工厂包装接口的实现类。在工厂类中读取配置文件，并利用反射来获取到实现类的方法。这样一来，需要调用不同的实现类时，不需要修改源代码，只需修改配置文件即可。</p>
+</li>
+</ul>
+<img src="https://s2.ax1x.com/2020/02/28/3DQwKf.png" alt="3DQwKf.png" style="zoom:90%;" />
+
+<ul>
+<li><p><strong>工程搭建</strong></p>
+<ul>
+<li>创建web工程，maven工程创建时直接选择webapp模板进行创建</li>
+<li>pom.xml添加spring framework的依赖</li>
+<li>在main下新建resource文件夹，并在project structure中的module中设为resource root</li>
+<li>在resource文件夹下创建applicationcontext.xml文件，为spring框架的配置文件，添加bean</li>
+</ul>
+</li>
+<li><p>编写测试方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//xml中bean标签的配置</span></span><br><span class="line">&lt;bean id="UserService" class="com.spring_test.UserDatabaseImpl"&gt;&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//这里UserService为接口，UserServiceImpl和UserDatabaseImpl是该接口的两个实现类</span></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringTest1</span> </span>&#123;</span><br><span class="line">      <span class="comment">/*传统方式*/</span></span><br><span class="line">      <span class="meta">@Test</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">springTest1</span><span class="params">()</span></span>&#123;</span><br><span class="line">          UserServiceImpl userService = <span class="keyword">new</span> UserServiceImpl();</span><br><span class="line">          userService.save();</span><br><span class="line">          UserDatabaseImpl userDatabase = <span class="keyword">new</span> UserDatabaseImpl();</span><br><span class="line">          userDatabase.save();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/*Spring的IOC方式*/</span></span><br><span class="line">      <span class="meta">@Test</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">springTest2</span><span class="params">()</span></span>&#123;</span><br><span class="line">          <span class="comment">//创建Spring的工厂</span></span><br><span class="line">          ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br><span class="line">          UserServiceImp userService = (UserServiceImp)applicationContext.getBean(<span class="string">"UserService"</span>);<span class="comment">//里面写bean的id</span></span><br><span class="line">          userService.save();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>IOC和DI</strong></p>
+<blockquote>
+<p>IOC：控制反转；将类的创建权反转给Spring进行管理</p>
+<p>DI：Dependency injection，依赖注入。前提必须有IOC的环境，Spring管理这个类的时候将类的依赖的属性注入（设置）进来。</p>
+</blockquote>
+</li>
+<li><p><strong>Spring的工厂类</strong></p>
+<p>老版本的工厂类BeanFactory：调用getBean的时候，才会生成类的实例。</p>
+<p>新版本的工程类ApplicationContext：加载配置文件的时候，就会将Spring管理的类都实例化</p>
+<img src="https://s2.ax1x.com/2020/03/02/3RbDyR.png" alt="3RbDyR.png" style="zoom:90%;" />
+</li>
+<li><p>Spring的xml文件的配置</p>
+<blockquote>
+<p>在maven中添加了spring相关的依赖后，IDEA的创建xml子列表中会有spring config选项</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>bean标签的配置：</p>
+<ul>
+<li><p>id，class已经提到</p>
+</li>
+<li><p>init-method：初始化方法，在Bean实例创建时调用</p>
+<p>destory-method：销毁方法，在Bean被销毁的时候执行的方法（Bean是单例创建，工厂关闭）</p>
+</li>
+<li><p>scope：bean的作用范围的配置</p>
+<p>​    取值：singleton(默认模式)，单例模式，只允许创建一个对象</p>
+<p>​               prototype，多例模式，允许创建多个对象</p>
+</li>
+</ul>
+</li>
+<li><p>bean属性的注入（DI）（<strong><em>方式四最简便，最推荐</em></strong>）</p>
+<ul>
+<li><p>方式一，以Set方式注入(在类中声明属性的set方法)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nameDao"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.NameDaoImpl"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--value只能设置普通数据类型--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"zhangfei"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方式二，以构造函数方式注入(在类中声明有参构造函数)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userService"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.UserServiceImpl"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"guanyu"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意</strong>，上面的两种方法中的<code>value</code>都只能给普通数据类型赋值，若属性类型为对象，则用<code>ref</code></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nameDao2"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.NameDao2"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--若属性的类型为对象，那么不能用value，而是用ref--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"nameDaoImpl"</span> <span class="attr">ref</span>=<span class="string">"nameDao"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这边的<code>name</code>指类中声明的变量名，<code>ref</code>中的内容，是另一个bean的id。</p>
+</blockquote>
+</li>
+<li><p>方式三：p名称空间注入，在beans标签内添加第二行内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">   <span class="attr">xmlns:p</span>=<span class="string">"http://www.springframework.org/schema/p"</span></span></span><br></pre></td></tr></table></figure>
+
+<p>接下来可在bean标签内直接通过<code>p:name=&#39;guanyu&#39;</code>或<code>p:nameDaoImpl-ref=nameDao</code>来赋值，如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nameDao2"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.NameDao2"</span> <span class="attr">p:nameDaoImpl-ref</span>=<span class="string">"nameDao"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><em>方式四</em></strong>：SpEl（Spring Expression Language），直接在value内用<code>#{}</code>来表示任何类型的属性，<em>可以是对象类型，可以是一个表达式，甚至可以是别的对象的属性或方法</em>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nameDao2"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.NameDao2"</span> <span class="attr">p:nameDaoImpl-ref</span>=<span class="string">"nameDao"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--这里对象类型也不需要再使用ref--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"nameDaoImpl"</span> <span class="attr">value</span>=<span class="string">"#&#123;nameDao&#125;"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>集合类型的属性注入（要用到property下一级的标签）</p>
+<ul>
+<li><p>数组，List，Set，类型的注入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 注入list集合 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"list"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">      	<span class="tag">&lt;<span class="name">value</span>&gt;</span>李四<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>map类型的注入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"map"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">map</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"aaa"</span> <span class="attr">value</span>=<span class="string">"111"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"bbb"</span> <span class="attr">value</span>=<span class="string">"222"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="SpringIOC的注解方式"><a href="#SpringIOC的注解方式" class="headerlink" title="SpringIOC的注解方式"></a>SpringIOC的注解方式</h3><ul>
+<li><p>创建工程，并创建<code>applicationContext.xml</code>配置文件</p>
+<ul>
+<li><p>与配置xml不同的方式，不在xml的beans标签下配置bean标签，而是用注解的方式</p>
+<ul>
+<li>首先在beans下开启Spring的组件扫描</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.spring_ioc_annotation"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在类中添加注解</p>
+<p>其中Component的值即为bean中的id</p>
+<p>属性上的Value即为属性注入<strong>这里注意的是如果是这种方式，set方法不是必须的，若有set则注解放在set方法上</strong></p>
+</li>
+</ul>
+</li>
+<li><p>IOC注解详解</p>
+<ul>
+<li><p><code>@Component</code>：组件</p>
+<ul>
+<li>修饰一个类，将这个类交给Spring管理</li>
+<li>三个衍生注解，<strong>实际使用时根据需要选择这三个注解</strong><ul>
+<li><code>@Contoroler</code>： web层</li>
+<li><code>@Service</code>： service层</li>
+<li><code>@Repository</code>：dao层</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>属性注入的注解</p>
+<ul>
+<li>普通属性：<code>@Value</code>： 设置普通属性的值</li>
+<li>对象类型的属性：<ul>
+<li><code>@Autowired</code> + <code>@Qualifierd</code></li>
+<li><code>@Resource</code>： <strong>这个注解不属于Spring框架，Maven要添加依赖javax.annotation</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Bean作用域与生命周期</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"nameDao"</span> <span class="attr">class</span>=<span class="string">"com.spring_test.NameDaoImpl"</span> <span class="attr">init-method</span>=<span class="string">"setup"</span> <span class="attr">destroy-method</span>=<span class="string">"destroy"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span> &gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>@Scope</code>： bean的作用域，默认为singleton，修饰在类上面。（对应xml中为<code>scope</code>）</li>
+<li><code>@PostConstruct</code>： 修饰在初始化方法上。（对应xml中为<code>init-method</code>）</li>
+<li><code>@Predestroy</code>： 修饰在销毁方法上。（对应xml中为<code>destroy-method</code>）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>综合例子如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span>(value = <span class="string">"userRepository"</span>)</span><br><span class="line"><span class="meta">@Scope</span>(value = <span class="string">"singleton"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepositoryImpl</span> <span class="keyword">implements</span> <span class="title">UserRepository</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"userDao"</span>)</span><br><span class="line">    <span class="comment">//@Resource(name = "userDao")</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"userRepository被初始化了..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"UserRepository的save()方法被调用了..."</span>);</span><br><span class="line">        userDao.save();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PreDestroy</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"userRepository被销毁了..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>XML和注解的比较</p>
+<ul>
+<li>XML：适用任何场景，结构清晰，维护方便。</li>
+<li>注解：开发方便，但是若一个类不是自己提供的，无法对其进行注解修改，就无法使用。</li>
+</ul>
+</li>
+<li><p>XML和注解整合开发</p>
+<ul>
+<li>XML管理Bean，注解完成属性注入。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spring——AOP"><a href="#Spring——AOP" class="headerlink" title="Spring——AOP"></a>Spring——AOP</h3><blockquote>
+<p><strong>AOP概念</strong>:  aspect oriented programming。面向切面编程，通过运行期间进行动态代理实现程序功能统一维护，能够对业务逻辑的各个部分进行隔离。<br><strong>适用场景：</strong>权限校验、日志记录、性能监控、事务管理。</p>
+</blockquote>
+<p><img src="https://s2.ax1x.com/2020/03/06/3qkwnO.png" alt="3qkwnO.png"></p>
+<ul>
+<li><p><strong>底层实现</strong>：动态代理（方式会根据判断自动切换）（即通过一个代理类，能够对不同的类进行代理）</p>
+<ul>
+<li>JDK动态代理：只能对实现了接口的类产生代理</li>
+<li>Cglib动态代理：对没有实现接口的类产生代理</li>
+</ul>
+</li>
+<li><p><strong>Spring中AspectJ的XML方式de AOP开发</strong></p>
+<ul>
+<li>AOP的相关术语 </li>
+</ul>
+<p><img src="https://s2.ax1x.com/2020/03/06/3q5QfI.png" alt="3q5QfI.png"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>入门AOP流程</strong></p>
+<ul>
+<li><p>创建maven工程，添加spring依赖，创建接口和实现类</p>
+</li>
+<li><p>配置applicationContext.xml，添加实现类的bean</p>
+</li>
+<li><p>创建Aspect类，创建Advice方法，并在xml中添加Aspect类的bean</p>
+<ul>
+<li>配置AOP(其中pointcut的expression表达式如何写后面会提到)  </li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置AOP--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置切入点，哪些类的哪些方法需要被增强--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut1_save"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.spring_aop_xml.ProductDaoImpl.save(..))"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置切面类来实现对上面的pointcut的增强(advice)--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">"myAspectXml"</span>&gt;</span> <span class="comment">&lt;!--ref为切面类的id--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--在save方法调用前后分别进行校验和日志记录--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">method</span>=<span class="string">"checkPri"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut1_save"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:after</span> <span class="attr">method</span>=<span class="string">"logDocumented"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut1_save"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意<code>proxy-target-class=&quot;true&quot;</code>，若没有加，在使用<code>@Resource注解时</code>会产生报错。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Spring结合junit编写测试类的简便写法（<strong>仅通过注解来实现配置文件读取与getBean的步骤</strong>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner<span class="class">.<span class="keyword">class</span>)//固定写法</span></span><br><span class="line">@ContextConfiguration("classpath:applicationContext3.xml")//解析配置文件创建工厂</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringAopTest1</span> </span>&#123;</span><br><span class="line">    <span class="comment">//配置文件解析后，直接调用所需的bean对象</span></span><br><span class="line">    <span class="meta">@Resource</span>(name = <span class="string">"productDao"</span>)</span><br><span class="line">    <span class="keyword">private</span> ProductDaoImpl productDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">springAopTest1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        productDao.save();</span><br><span class="line">        productDao.delete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Spring的通知类型</strong></p>
+<ul>
+<li><p>前置通知<code>&lt;aop:bfore/&gt;</code>：在目标执行前进行操作，能够<strong>获取切入点信息</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkPri</span><span class="params">(JoinPoint joinPoint)</span></span>&#123;</span><br><span class="line">System.out.println(<span class="string">"校验成功..."</span> + joinPoint);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*  那么接下来会在控制台打出</span></span><br><span class="line"><span class="comment">    校验成功...execution(void com.spring_aop_xml.ProductDaoImpl.save())</span></span><br><span class="line"><span class="comment">    商品被保存*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后置通知<code>&lt;aop:after-returning/&gt;</code>：在目标方法执行后的操作，<strong>能获得目标方法的返回值</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">logDocumented</span><span class="params">(Object result)</span></span>&#123;<span class="comment">//且result的内容为目标方法的返回值</span></span><br><span class="line">    System.out.println(<span class="string">"日志记录成功..."</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//那么xml中配置时，后面要加上returning，值必须为advice中的输入参数名称result</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置时，后面要加上returning，值必须为advice中的输入参数名称result--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:after-returning</span> <span class="attr">method</span>=<span class="string">"searchSuccess"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut2_search"</span> <span class="attr">returning</span>=<span class="string">"result"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>环绕通知<code>&lt;aop:around/&gt;</code>:在目标方法执行前和执行后都进行操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">aroundMethod</span><span class="params">(ProceedingJoinPoint joinPoint)</span></span>&#123;</span><br><span class="line">    Systom.out.print(<span class="string">"环绕前增强..."</span>);</span><br><span class="line">    Object obj = joinPoint.proceed();<span class="comment">//执行目标方法</span></span><br><span class="line">    Systom.out.print(<span class="string">"环绕后增强"</span>);</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>异常抛出通知<code>&lt;aop:afterthrowing/&gt;</code>：在目标方法内出现异常时进行操作,<strong>可以打印异常信息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionThrow</span><span class="params">(Throwable ex)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"异常抛出了..."</span> + ex.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置时，要在后面加上throwing参数，值为advice中的输入变量的名称ex--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:after-throwing</span> <span class="attr">method</span>=<span class="string">"exceptionThrow"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut3_update"</span> <span class="attr">throwing</span>=<span class="string">"ex"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>最终通知<code>&lt;aop:after/&gt;</code>，无论目标方法代码是否有异常，都会执行。(相当于try catch中的finnally代码块)</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>AOP切入点表达式的写法</strong></p>
+<ul>
+<li><p><strong>基于execution的函数</strong>完成的</p>
+</li>
+<li><p>语法:[访问修饰符(可省略)] 方法返回值 包名.类名.方法名(参数)</p>
+<p>​        (public) void com.spring_aop_xml.ProductDaoImpl.save(..)</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>SpringAOP的注解开发</strong></p>
+<ul>
+<li><p>创建工程，创建目标类，创建切面类并编写advice</p>
+</li>
+<li><p>创建配置文件，添加目标类和切面类的beans</p>
+</li>
+<li><p>在配置文件中开启注解的AOP开发</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>  <span class="attr">proxy-target-class</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>同xml类型的配置，不加<code>proxy-target-class=&quot;true&quot;</code>的话，在使用<code>@Resource</code>注解时会报错</p>
+</blockquote>
+</li>
+<li><p>在切面类上使用注解</p>
+</li>
+<li><p>注解详解</p>
+<ul>
+<li><code>@Aspect</code>：写在切面类的上方，声明用来配置AOP</li>
+<li>写在切面类的方法的上方，声明advice类型<ul>
+<li><code>@Before</code>：前置通知</li>
+<li><code>@AfterReturning</code>：后置通知</li>
+<li><code>@Around</code>：环绕通知</li>
+<li><code>@After</code>：最终通知</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spring的事务管理"><a href="#Spring的事务管理" class="headerlink" title="Spring的事务管理"></a>Spring的事务管理</h3><blockquote>
+<p><strong>事务</strong>：逻辑上的一组操作，组成这个操作的各个单元，要么全部成功，要么全部失败</p>
+<p><strong>事物的特性</strong>：</p>
+<ul>
+<li>原子性：事务不可分割</li>
+<li>一致性：事务执行前后数据完整性保持一致</li>
+<li>隔离性：一个事务的执行不应该收到其他事务的干扰</li>
+<li>持久性：一旦事务结束，数据就持久化到数据库</li>
+</ul>
+</blockquote>
+<ul>
+<li><p><strong>Spring事务管理的API</strong>（主要包括三个类）</p>
+<ul>
+<li><code>PlatformTransactionManager</code>：平台事务管理器，接口，是Spring用来管理事务的真正对象<ul>
+<li><code>DataSourceTransactionManager</code>：底层用JDBC管理事务</li>
+<li><code>HibernateTransactionManager</code>：底层用Hibernate管理事务</li>
+</ul>
+</li>
+<li><code>TransactionDefinition</code>：事务定义信息，用于定义事务的相关信息，如隔离级别，超时信息，传播行为，是否只读</li>
+<li><code>TransactionStatus</code>：事务的状态，用来记录事务管理过程中是无状态的对象</li>
+<li>关系：<strong><em>平台事务管理器</em></strong>根据事务<strong><em>定义信息</em></strong>进行事务的管理，在管理过程中会产生各种状态，将这种状态的信息记录到<strong><em>事务状态的对象</em></strong>中</li>
+</ul>
+</li>
+<li><p><strong>Spring事务的传播行为</strong>(共3个类别):用来解决业务层复杂的方法相互调用的问题</p>
+<img src="https://s1.ax1x.com/2020/04/21/J8MPZF.png" alt="J8MPZF.png" style="zoom: 50%;" />
+
+<ul>
+<li>保证多个操作在同一个事务中<ul>
+<li><code>PROPAGATION_REQUIRED</code>: 默认值，如果x中有事务，使用x中的事务，如果x没有，y里创建一个新的事务，将操作(cd)包含进来</li>
+</ul>
+</li>
+<li>保证多个操作不在同一个事务中<ul>
+<li><code>PROPAGATION_REQUIRES_NEW</code>:如果x中有事务，将x的事务挂起，创建新事务，只包含自身操作(cd)，如果x中没有事务，创建一个新事务，包含自身操作(cd)</li>
+</ul>
+</li>
+<li>嵌套事务<ul>
+<li><code>PROPAGATION_NESTED</code>:嵌套事务，如果x中有事务，按照x的事务执行，执行完成后，设置一个保存点，执行y中的操作，如果没有异常，执行通过，如果有异常，可以选择回滚到最初始位置，也可以回滚到保存点。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Spring事务管理</strong></p>
+<ul>
+<li><p><strong>编程式管理</strong></p>
+<ul>
+<li><p>在spring配置文件中配置平台事务管理器</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Spring提供了事务管理的模板，接下来配置事务管理的模板类</p>
+</li>
+<li><p>注入事务管理的模板，将事务执行的代码放到模板</p>
+</li>
+</ul>
+</li>
+<li><p><strong>声明式事务管理：XML方式</strong></p>
+<blockquote>
+<p>声明式事务管理用的是AOP实现</p>
+</blockquote>
+<ul>
+<li><p>配置平台事务管理器</p>
+</li>
+<li><p>配置事务的增强（这里切面类不用自己编写，Spring有事务的模板）</p>
+<img src="https://s1.ax1x.com/2020/04/21/J82UXt.png" alt="J82UXt.png" style="zoom: 67%;" />
+</li>
+<li><p>AOP配置，将增强应用到目标类</p>
+</li>
+</ul>
+</li>
+<li><p><strong>声明式事务管理：注解方式</strong></p>
+<ul>
+<li><p>配置平台事务管理器</p>
+</li>
+<li><p>开启注解事务</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tx:annotation-driven</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在业务层上添加注解<code>@Transactional</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>见到的问题，</p>
+<ul>
+<li><p>aop配置中没有加<code>proxy-target-class=&quot;true&quot;</code>，报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named &#39;productDao&#39; must be of type [com.spring_aop_xml.ProductDaoImpl], but was actually of type [com.sun.proxy.$Proxy13]</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>init-method方法在工厂生成时就会被调用</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/19/2020-7-12/" rel="prev" title="2020-7-12">
+      <i class="fa fa-chevron-left"></i> 2020-7-12
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/05/SM/" rel="next" title="SM">
+      SM <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring——IOC"><span class="nav-number">2.</span> <span class="nav-text">Spring——IOC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringIOC的注解方式"><span class="nav-number">3.</span> <span class="nav-text">SpringIOC的注解方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring——AOP"><span class="nav-number">4.</span> <span class="nav-text">Spring——AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring的事务管理"><span class="nav-number">5.</span> <span class="nav-text">Spring的事务管理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCWang"
+      src="/images/1.JPG">
+  <p class="site-author-name" itemprop="name">DCWang</p>
+  <div class="site-description" itemprop="description">听风辄碎的孤魂。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weiruchenai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weiruchenai" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:475596527@qq.com" title="E-Mail → mailto:475596527@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/dcwang74" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;dcwang74" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCWang</span>
+
+
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='9,9,9' opacity='0.5' zIndex='-1' count='100' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/clicklove.js"></script>
+</body>
+</html>

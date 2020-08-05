@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-flat-top.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://weiruchenai.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Mybatis入门（简介 工程搭建 基于需求的测试）、Mybatis的Dao开发（传统方式与动态代理方式）、Mybatis的输入输出映射、Mybatis与Spring整合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SM">
+<meta property="og:url" content="http://weiruchenai.github.io/2020/08/05/SM/index.html">
+<meta property="og:site_name" content="DCWang&#39;s Blog">
+<meta property="og:description" content="Mybatis入门（简介 工程搭建 基于需求的测试）、Mybatis的Dao开发（传统方式与动态代理方式）、Mybatis的输入输出映射、Mybatis与Spring整合">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/07/03/NX7z7V.png">
+<meta property="article:published_time" content="2020-08-05T09:14:18.000Z">
+<meta property="article:modified_time" content="2020-08-05T10:09:27.841Z">
+<meta property="article:author" content="DCWang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Mybatis">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/07/03/NX7z7V.png">
+
+<link rel="canonical" href="http://weiruchenai.github.io/2020/08/05/SM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>SM | DCWang's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DCWang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">听风辄碎的孤魂。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://weiruchenai.github.io/2020/08/05/SM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.JPG">
+      <meta itemprop="name" content="DCWang">
+      <meta itemprop="description" content="听风辄碎的孤魂。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCWang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-05 17:14:18 / 修改时间：18:09:27" itemprop="dateCreated datePublished" datetime="2020-08-05T17:14:18+08:00">2020-08-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+            <div class="post-description">Mybatis入门（简介 工程搭建 基于需求的测试）、Mybatis的Dao开发（传统方式与动态代理方式）、Mybatis的输入输出映射、Mybatis与Spring整合</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Mybatis入门"><a href="#Mybatis入门" class="headerlink" title="Mybatis入门"></a>Mybatis入门</h2><h3 id="1、Mybatis简介"><a href="#1、Mybatis简介" class="headerlink" title="1、Mybatis简介"></a>1、Mybatis简介</h3><ul>
+<li>Mybatis是面向sql的ORM持久层框架，他封装了jdbc访问数据库的过程，我们开发，只需专注于sql语句本身的拼装，其它复杂的过程全部可以交给mybatis去完成</li>
+</ul>
+<blockquote>
+<p><strong>持久层框架</strong>：持久是相对于瞬时来说的，持久层，可以理解成数据 保存在 <em>数据库</em> 或者 <em>硬盘</em> 一类可以保存很长时间的设备里面，不像放在内存中那样断电就消失了，也就是把数据存在持久化设备上。你想一下 内存中的数据 断电就没有了，硬盘的数据 是否会像内存中的数据一样断电消失么？<br><strong>ORM</strong>: 对象关系映射</p>
+</blockquote>
+<h3 id="2、工程搭建流程"><a href="#2、工程搭建流程" class="headerlink" title="2、工程搭建流程"></a>2、工程搭建流程</h3><ul>
+<li><p>1、maven添加依赖</p>
+<p>2、resource文件夹（projectstructure中文件夹类型<strong>设置为resource类型</strong>）下新建并配置SqlMapConfig.xml，即MyBatis的配置文件，<strong>用来配置数据库连接池</strong></p>
+<p>3、创建pojo（用于将数据库返回的一个数据对象化）</p>
+<p>4、config文件夹下配置sql查询的映射文件</p>
+<p>5、SQLMapConfig.xml中加载上面的映射文件</p>
+</li>
+</ul>
+<h3 id="3、需求解决"><a href="#3、需求解决" class="headerlink" title="3、需求解决"></a>3、需求解决</h3><h4 id="3-1-根据用户ID查询用户信息"><a href="#3-1-根据用户ID查询用户信息" class="headerlink" title="3.1 根据用户ID查询用户信息"></a>3.1 根据用户ID查询用户信息</h4><ul>
+<li><p>1、编写SQL语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">		&#96;id&#96;,</span><br><span class="line">		&#96;username&#96;,</span><br><span class="line">		&#96;birthday&#96;,</span><br><span class="line">		&#96;sex&#96;,</span><br><span class="line">		&#96;address&#96;</span><br><span class="line">FROM &#96;user&#96;</span><br><span class="line">WHERE id &#x3D; 1</span><br></pre></td></tr></table></figure>
+
+<p>2、配置SQL查询的映射文件，在mapper标签下添加要查询的映射内容</p>
+<blockquote>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里#&#123;&#125;表示占位符，后面调用时会根据函数传入值获取到不同的id</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--namespace用于隔离SQL语句--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"user"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">        id : sql id，sql语句的唯一标识符</span></span><br><span class="line"><span class="comment">        parameterType: 入参的数据类型</span></span><br><span class="line"><span class="comment">        resultType: 返回结果的数据类型</span></span><br><span class="line"><span class="comment">		最后一句的#&#123;&#125;表示占位符，后面调用时会根据函数传入值获取到不同的id</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserById"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--将SQL语句放在这里,此处仅写最后一行，与原SQL语句不同--&gt;</span></span><br><span class="line">        WHERE id = #&#123;id&#125; </span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>3、编写测试程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGetUserById</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//创建SqlSessionFactoryBuilder对象</span></span><br><span class="line">    SqlSessionFactoryBuilder ssfa = <span class="keyword">new</span> SqlSessionFactoryBuilder();</span><br><span class="line">    <span class="comment">//创建核心配置文件的输入流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(<span class="string">"SQLMapConfig.xml"</span>);</span><br><span class="line">    <span class="comment">//通过输入流创建SqlSessionFactory对象</span></span><br><span class="line">    SqlSessionFactory ssf = ssfa.build(inputStream);</span><br><span class="line">    <span class="comment">//创建SqlSession对象</span></span><br><span class="line">    SqlSession ss = ssf.openSession();</span><br><span class="line">    <span class="comment">//执行查询，字符串内容为namespace.id</span></span><br><span class="line">    User user = ss.selectOne(<span class="string">"user.getUserById"</span>,<span class="number">1</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">    <span class="comment">//释放资源</span></span><br><span class="line">    ss.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="3-2-根据用户名模糊查询用户列表"><a href="#3-2-根据用户名模糊查询用户列表" class="headerlink" title="3.2 根据用户名模糊查询用户列表"></a>3.2 根据用户名模糊查询用户列表</h4><ul>
+<li><p>1、编写Sql语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WHERE username LIKE &#39;%张%&#39; &#x2F;*只写了最后一句，其余和上面相同*&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>2、配置SQL查询的映射文件，在mapper标签下添加要查询的映射内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByName"</span> <span class="attr">parameterType</span>=<span class="string">"string"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    SELECT</span><br><span class="line">    `id`,</span><br><span class="line">    `username`,</span><br><span class="line">    `birthday`,</span><br><span class="line">    `sex`,</span><br><span class="line">    `address`</span><br><span class="line">    FROM `user`</span><br><span class="line">    WHERE username LIKE #&#123;username&#125; </span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>3、编写测试程序</p>
+<blockquote>
+<p>这里已经将生成SqlSessionFactory的过程封装成了一个工具类，减少冗余</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGetUserByName</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//直接创建SqlSession对象</span></span><br><span class="line">	SqlSessionFactory ssf = SqlSessionFactoryUtils.getSqlSessionFactory();</span><br><span class="line">	SqlSession ss = ssf.openSession();</span><br><span class="line">	<span class="comment">//执行查询</span></span><br><span class="line">	List&lt;User&gt; users = ss.selectList(<span class="string">"user.getUserByName"</span>, <span class="string">"%张%"</span>);</span><br><span class="line">	<span class="keyword">for</span> (User user: users) &#123;</span><br><span class="line">		System.out.println(user);</span><br><span class="line">	&#125;</span><br><span class="line">	ss.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ul>
+<h4 id="3-3-插入用户"><a href="#3-3-插入用户" class="headerlink" title="3.3 插入用户"></a>3.3 插入用户</h4><ul>
+<li><p>1、编写SQL语句</p>
+</li>
+<li><p>2、配置SQL查询的映射文件</p>
+<blockquote>
+<p>此处标签为inser；此外，因为id是自动分配，因此可以不用设置</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--插入用户--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"insertUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    INSERT INTO `user` ( `username`, `birthday`, `sex`, `address` )</span><br><span class="line">    VALUES</span><br><span class="line">    ( #&#123;username&#125;,</span><br><span class="line">    #&#123;birthday&#125;,</span><br><span class="line">    #&#123;sex&#125;,</span><br><span class="line">    #&#123;address&#125;);</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、编写测试文件</p>
+<blockquote>
+<p>这里要记得调用SqlSession.commit()；提交事务，不然数据库不会更新</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">    SqlSession ss = SqlSessionFactoryUtils.getSqlSessionFactory().openSession();</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setUsername(<span class="string">"张口就莱"</span>);</span><br><span class="line">    user.setSex(<span class="string">"男"</span>);</span><br><span class="line">    user.setAddress(<span class="string">"浙江杭州"</span>);</span><br><span class="line">    user.setBirthday(<span class="keyword">new</span> Date());</span><br><span class="line">    ss.insert(<span class="string">"user.insertUser"</span>, user);</span><br><span class="line">    ss.commit();</span><br><span class="line">    ss.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="3-4-修改和删除"><a href="#3-4-修改和删除" class="headerlink" title="3.4 修改和删除"></a>3.4 修改和删除</h4><ul>
+<li><p>修改的映射文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--修改用户--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"updateUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    UPDATE USER</span><br><span class="line">    SET username = #&#123;username&#125;</span><br><span class="line">    WHERE</span><br><span class="line">    id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除的映射文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">"deleteUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    /*SET FOREIGN_KEY_CHECKS = 0*/</span><br><span class="line">    DELETE FROM `user`</span><br><span class="line">    WHERE `id` = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="3-5-MyBatis框架的架构体系"><a href="#3-5-MyBatis框架的架构体系" class="headerlink" title="3.5 MyBatis框架的架构体系"></a>3.5 MyBatis框架的架构体系</h4><img src="https://s1.ax1x.com/2020/07/03/NX7z7V.png" alt="NX7z7V.png" style="zoom:50%;" />
+
+<h4 id="遇到的几个问题"><a href="#遇到的几个问题" class="headerlink" title="遇到的几个问题"></a>遇到的几个问题</h4><ul>
+<li>时区出错，加上时区</li>
+<li>还出错，&amp;改成&amp;amp；</li>
+<li>注释中的#{}中也必须要有内容</li>
+<li>去除xml中的黄线提示</li>
+<li>删除时提示错误，要设置FOREIGN_KEY_CHECKS</li>
+</ul>
+<h2 id="Mybatis-DAO开发方式"><a href="#Mybatis-DAO开发方式" class="headerlink" title="Mybatis DAO开发方式"></a>Mybatis DAO开发方式</h2><blockquote>
+<p>DAO: data access object 数据访问对象</p>
+</blockquote>
+<h3 id="1、传统DAO包装方式"><a href="#1、传统DAO包装方式" class="headerlink" title="1、传统DAO包装方式"></a>1、传统DAO包装方式</h3><ul>
+<li>思路：将查询插入等操作抽象为一个接口，并定义一个类实现接口，以实现查询插入等操作。实际使用时只需调用方法即能实现操作。<em>本质是把SqlSession的生成、调用、释放的过程封装了起来。</em></li>
+<li>user.xml配置，过程与前一部分的sql映射配置文件相同</li>
+<li>接口的定义</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据id查询用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>: Interger 用户id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>: User 查询到的用户</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function">User <span class="title">getUserById</span><span class="params">(Integer id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>: User</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实现类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUserById</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        SqlSession sqlSession = SqlSessionFactoryUtils.getSqlSessionFactory().openSession();</span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"user.getUserById"</span>,id);</span><br><span class="line">        sqlSession.close();</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        SqlSession sqlSession = SqlSessionFactoryUtils.getSqlSessionFactory().openSession();</span><br><span class="line">        sqlSession.insert(<span class="string">"user.insertUser"</span>, user);</span><br><span class="line">        sqlSession.commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建UserDaoImpl类实例，通过实例中的方法来直接执行增删改查等操作。</li>
+</ul>
+<h3 id="2、动态代理DAO包装"><a href="#2、动态代理DAO包装" class="headerlink" title="2、动态代理DAO包装"></a>2、动态代理DAO包装</h3><blockquote>
+<p><strong>动态代理开发规则</strong>：<br>1、只有接口没有实现类<br>2、mapper中的namespace必须是接口的全路径名<br>3、接口的方法名必需与mapper映射文件的sql id一致<br>4、接口的输入参数类型必需与映射文件的parameterType类型一致<br>5、接口的返回类型必须与映射文件的resultType类型一致</p>
+</blockquote>
+<ul>
+<li>声明一个接口命名为UserMapper，方法内容和传统DAO的接口相同（同上）</li>
+<li>UserMapper.xml配置，注意namespace，sql的id，parameterType以及resultType的声明要遵守上面的规则</li>
+<li>创建测试文件，在测试文件中通过动态代理来实现DAO</li>
+</ul>
+<blockquote>
+<p>这里通过<code>UserDao userDao = sqlSession.getMapper(UserDao.class);</code>来动态获取接口对象，并直接调用方法（内部工作由Mybatis自动完成）</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGetUserById</span><span class="params">()</span></span>&#123;</span><br><span class="line">    SqlSession sqlSession = SqlSessionFactoryUtils.getSqlSessionFactory().openSession();</span><br><span class="line">    UserDao userDao = sqlSession.getMapper(UserDao<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    User user = userDao.getUserById(<span class="number">33</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">    sqlSession.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Mybatis-相应知识点"><a href="#Mybatis-相应知识点" class="headerlink" title="Mybatis 相应知识点"></a>Mybatis 相应知识点</h2><h3 id="1、输入输出映射"><a href="#1、输入输出映射" class="headerlink" title="1、输入输出映射"></a>1、输入输出映射</h3><ul>
+<li><p>parameterType（输入类型）：</p>
+<ul>
+<li><p>简单类型，int ，string…</p>
+</li>
+<li><p>简单pojo类型，#{}或者${}括号中的值为pojo属性名称。</p>
+</li>
+<li><p>包装pojo类型，包装pojo即将user对象为单位的插入查找等方法包装到一个包装类里去</p>
+</li>
+</ul>
+</li>
+<li><p>resultType（输出类型）</p>
+<ul>
+<li><p>简单类型，如查询用户总记录数，返回一个int值</p>
+</li>
+<li><p>reslutMap</p>
+<ul>
+<li><p>适用情况，当pojo的成员变量和数据库中的<strong>因java和数据库的命名规范导致字段名不一致时</strong>（如pojo为userId，但数据库字段名为user_id），<strong>数据调用可能会出错</strong>，这时可以通过resultMap来通过映射将两者关联起来。相应的mapper映射文件内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"orderListResultMap"</span> <span class="attr">type</span>=<span class="string">"pojo.Order"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--id用于映射主键，property为pojo的变量名，column为数据库的字段名--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span> <span class="attr">property</span>=<span class="string">"id"</span> <span class="attr">column</span>=<span class="string">"id"</span>/&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--result用于映射普通字段--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"userId"</span> <span class="attr">column</span>=<span class="string">"user_id"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"number"</span> <span class="attr">column</span>=<span class="string">"number"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"creattime"</span> <span class="attr">column</span>=<span class="string">"creattime"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"note"</span> <span class="attr">column</span>=<span class="string">"note"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getOrderResultMap"</span> <span class="attr">resultMap</span>=<span class="string">"orderListResultMap"</span>&gt;</span></span><br><span class="line">      SELECT</span><br><span class="line">`id`,</span><br><span class="line">`user_id`,</span><br><span class="line">`number`,</span><br><span class="line">`createtime`,</span><br><span class="line">`note`</span><br><span class="line">      FROM `order`</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、动态SQL"><a href="#2、动态SQL" class="headerlink" title="2、动态SQL"></a>2、动态SQL</h3><ul>
+<li><h3 id="3、关联查询"><a href="#3、关联查询" class="headerlink" title="3、关联查询"></a>3、关联查询</h3></li>
+<li></li>
+</ul>
+<h2 id="Mybatis-整合Spring"><a href="#Mybatis-整合Spring" class="headerlink" title="Mybatis 整合Spring"></a>Mybatis 整合Spring</h2><h3 id="1、整体思路与步骤"><a href="#1、整体思路与步骤" class="headerlink" title="1、整体思路与步骤"></a>1、整体思路与步骤</h3><ul>
+<li><p>思路</p>
+<ul>
+<li>1、SqlSessionFactory对象应该放到spring容器中作为单例存在。</li>
+<li>2、传统dao的开发方式中，应该从spring容器中获得sqlsession对象。</li>
+<li>3、Mapper代理形式中，应该从spring容器中直接获得mapper的代理对象。</li>
+<li>4、数据库的连接以及数据库连接池事务管理都交给spring容器来完成。</li>
+</ul>
+</li>
+<li><p>步骤</p>
+<ul>
+<li><p>1、创建一个maven工程。</p>
+</li>
+<li><p>2、maven添加依赖</p>
+</li>
+<li><p>3、mybatis的配置文件sqlmapConfig.xml</p>
+</li>
+<li><p>4、编写Spring的配置文件applicationContext.xml</p>
+<ul>
+<li><p>（1）数据库连接及连接池</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--加载JDBC配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">"jdbc.properties"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!--数据库连接池--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span> <span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driver&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--连接池最大连接数与最大空闲数--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxActive"</span> <span class="attr">value</span>=<span class="string">"10"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxIdle"</span> <span class="attr">value</span>=<span class="string">"5"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中<code>jdbc.properties</code>内容</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">jdbc.driver</span>=<span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="meta">jdbc.url</span>=<span class="string">jdbc:mysql://localhost:3306/mybatistest?characterEncoding=utf-8&amp;serverTimezone=UTC</span></span><br><span class="line"><span class="meta">jdbc.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">jdbc.password</span>=<span class="string">Wdc82563815</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>（2）将sqlsessionFactory对象配置到spring容器中，mybatis-spring整合的包里有<code>SqlSessionFactoryBean</code>对象，直接将其配置到sping配置文件中去，并对其内部的两个关键属性赋值</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置SqlSessionFactory--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--数据源,ref即数据库连接池的id--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- mybatis核心配置文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"configLocation"</span> <span class="attr">value</span>=<span class="string">"classpath:SQLMapConfig2.xml"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、传统Dao开发（需要接口的实现类）"><a href="#2、传统Dao开发（需要接口的实现类）" class="headerlink" title="2、传统Dao开发（需要接口的实现类）"></a>2、传统Dao开发（需要接口的实现类）</h3><ul>
+<li><p>创建UserDao2，编写user2.xml映射文件，将映射文件添加到SQLMapConfig2.xml</p>
+</li>
+<li><p>编写UserDao2Impl实现类，==关键是要继承<code>SqlSessionDaoSupport</code>==，原因是其内部有<code>getSqlSession()</code>方法来获取<code>SqlSession</code>对象（以根据id查找用户的方法为例）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDao2Impl</span> <span class="keyword">extends</span> <span class="title">SqlSessionDaoSupport</span> <span class="keyword">implements</span> <span class="title">UserDao2</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUserById</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//SqlSessionDaoSupport中有获取SqlSession的方法</span></span><br><span class="line">        SqlSession sqlSession = <span class="keyword">super</span>.getSqlSession();</span><br><span class="line">        <span class="comment">//查询用户并返回</span></span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"UserDao2.getUserById"</span>, id);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在applicationContext2.xml中添加bean</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--传统Dao开发方式--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.springmybatis.UserDao2Impl"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--sqlSessionFactory属性来自其父类SqlSessionDaoSupport，</span></span><br><span class="line"><span class="comment">            为其注入已经配置好的工厂类，ref为上面的id--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写测试类</p>
+</li>
+</ul>
+<h3 id="2、动态Dao开发（无需dao接口的实现类）"><a href="#2、动态Dao开发（无需dao接口的实现类）" class="headerlink" title="2、动态Dao开发（无需dao接口的实现类）"></a>2、动态Dao开发（无需dao接口的实现类）</h3><ul>
+<li><p>创建并编写userMapper2.xml映射文件，将mapper添加到Mybatis核心配置文件中</p>
+</li>
+<li><p>在Spring配置文件中配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--动态dao开发方式--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"mapperScannerConfigurer"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.mapper.MapperScannerConfigurer"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"basePackage"</span> <span class="attr">value</span>=<span class="string">"com.springmybatis"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactoryBeanName"</span> <span class="attr">value</span>=<span class="string">"sqlSessionFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>编写测试类</strong></p>
+<ul>
+<li><p>不使用注解时，通过<code>applicationContext.getBean(UserDao2_1.class)</code>来获取dao对象，注意这里的<code>UserDao2_1.class</code>，此前参数为类的bean id，这里动态DAO方式直接通过.class来动态获取接口对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">springMybatisTest2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext2.xml"</span>);</span><br><span class="line">    UserDao2_1 userDao2_1 = applicationContext.getBean(UserDao2_1<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    System.out.println(userDao2_1.getUserById(<span class="number">30</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用注解时，只需在dao接口类的上面添加<code>@Repository(value = &quot;userDao2_1&quot;)</code>，然后通过对象属性注入即可使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier</span>(value = <span class="string">"userDao2_1"</span>)</span><br><span class="line"><span class="keyword">private</span> UserDao2_1 userDao2_1;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<p>问题</p>
+<p>1、找不到SqlSessionDaoSupport</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Error:(9, 8) java: 无法访问org.springframework.dao.support.DaoSupport</span><br><span class="line">  找不到org.springframework.dao.support.DaoSupport的类文件</span><br></pre></td></tr></table></figure>
+
+<p>原因，maven引入spring-tx包</p>
+<p>2、创建SqlSessionFactory异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &#39;sqlSessionFactory&#39; defined in class path resource [applicationContext2.xml]: Error setting property values; nested exception is org.springframework.beans.PropertyBatchUpdateException</span><br></pre></td></tr></table></figure>
+
+<p>原因：maven引入spring-jdbc</p>
+<p>3、JDBC连接异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection; nested exception is org.apache.commons.dbcp.SQLNestedException: Cannot create PoolableConnectionFactory (Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Malformed database URL, failed to parse the connection string near &#39;;serverTimezone&#x3D;UTC&#39;.)</span><br><span class="line">### The error may exist in mybatis&#x2F;user2.xml</span><br><span class="line">### The error may involve UserDao2.getUserById</span><br><span class="line">### The error occurred while executing a query</span><br><span class="line">### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection;</span><br></pre></td></tr></table></figure>
+
+<p>原因：在xml中连接池中url的value中的<code>&amp;</code>是实体字符，改成了<code>&amp;amp;</code>我直接将这个url复制到了<code>jdbc.properties</code>中，出现这个问题，将<code>amp;</code>去掉即可</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/Mybatis/" rel="tag"><i class="fa fa-tag"></i> Mybatis</a>
+              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/05/Spring/" rel="prev" title="Spring">
+      <i class="fa fa-chevron-left"></i> Spring
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/05/SpringMVC/" rel="next" title="SpringMVC">
+      SpringMVC <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis入门"><span class="nav-number">1.</span> <span class="nav-text">Mybatis入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、Mybatis简介"><span class="nav-number">1.1.</span> <span class="nav-text">1、Mybatis简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、工程搭建流程"><span class="nav-number">1.2.</span> <span class="nav-text">2、工程搭建流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、需求解决"><span class="nav-number">1.3.</span> <span class="nav-text">3、需求解决</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-根据用户ID查询用户信息"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 根据用户ID查询用户信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-根据用户名模糊查询用户列表"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 根据用户名模糊查询用户列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-插入用户"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 插入用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-修改和删除"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 修改和删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-MyBatis框架的架构体系"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 MyBatis框架的架构体系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#遇到的几个问题"><span class="nav-number">1.3.6.</span> <span class="nav-text">遇到的几个问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis-DAO开发方式"><span class="nav-number">2.</span> <span class="nav-text">Mybatis DAO开发方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、传统DAO包装方式"><span class="nav-number">2.1.</span> <span class="nav-text">1、传统DAO包装方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、动态代理DAO包装"><span class="nav-number">2.2.</span> <span class="nav-text">2、动态代理DAO包装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis-相应知识点"><span class="nav-number">3.</span> <span class="nav-text">Mybatis 相应知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、输入输出映射"><span class="nav-number">3.1.</span> <span class="nav-text">1、输入输出映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、动态SQL"><span class="nav-number">3.2.</span> <span class="nav-text">2、动态SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、关联查询"><span class="nav-number">3.3.</span> <span class="nav-text">3、关联查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis-整合Spring"><span class="nav-number">4.</span> <span class="nav-text">Mybatis 整合Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、整体思路与步骤"><span class="nav-number">4.1.</span> <span class="nav-text">1、整体思路与步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、传统Dao开发（需要接口的实现类）"><span class="nav-number">4.2.</span> <span class="nav-text">2、传统Dao开发（需要接口的实现类）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、动态Dao开发（无需dao接口的实现类）"><span class="nav-number">4.3.</span> <span class="nav-text">2、动态Dao开发（无需dao接口的实现类）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCWang"
+      src="/images/1.JPG">
+  <p class="site-author-name" itemprop="name">DCWang</p>
+  <div class="site-description" itemprop="description">听风辄碎的孤魂。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/weiruchenai" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;weiruchenai" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:475596527@qq.com" title="E-Mail → mailto:475596527@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/dcwang74" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;dcwang74" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCWang</span>
+
+
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='9,9,9' opacity='0.5' zIndex='-1' count='100' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/clicklove.js"></script>
+</body>
+</html>
